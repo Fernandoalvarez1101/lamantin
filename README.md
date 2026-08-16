@@ -79,3 +79,40 @@ flutter run
 flutter test
 ```
 
+## Despliegue (GitHub Pages)
+
+La base de datos y la autenticación viven en Supabase (proyecto
+`hfvxxngrtayjqbgfsmif`). La app web se publica como sitio estático en
+GitHub Pages mediante el workflow de `.github/workflows/deploy.yml`.
+
+Pasos (la primera vez):
+
+1. Crear el repositorio **`lamantin`** en GitHub (público → Pages gratuito).
+   Si el repositorio se llama distinto, ajustar el `--base-href` del workflow
+   (la URL de Pages será `https://<usuario>.github.io/<repositorio>/`).
+2. Vincular y subir:
+
+   ```bash
+   git remote add origin https://github.com/<usuario>/lamantin.git
+   git push -u origin main
+   ```
+
+3. Activar Pages: **Settings → Pages → Source: *GitHub Actions***. El workflow
+   compila (`flutter build web --release --base-href=/lamantin/`) y publica
+   `build/web` automáticamente en cada push a `main`.
+4. En Supabase: **Authentication → URL Configuration → Site URL** =
+   `https://<usuario>.github.io/lamantin/` (para que los enlaces de correo
+   apunten a la app publicada).
+5. Abrir la URL publicada, registrarse, confirmar el correo y probar el flujo
+   completo (paciente → instrumento → sesión → informe).
+
+Notas:
+
+- El proyecto está pensado para ejecutarse en **web**; para recargar la app en
+  desarrollo y conservar la sesión, usar puerto fijo:
+  `flutter run -d chrome --web-port=8080`.
+- Los datos de los pacientes están aislados por profesional (RLS por
+  `profesional_id` en Supabase) y la sesión persiste en el navegador
+  (`localStorage`).
+
+
