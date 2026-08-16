@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
 name: Deploy a GitHub Pages
 
 # "on" entre comillas: evita que el parser YAML 1.1 lo interprete como
