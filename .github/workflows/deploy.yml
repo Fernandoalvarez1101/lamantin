@@ -1,6 +1,9 @@
 name: Deploy a GitHub Pages
 
-on:
+# "on" entre comillas: evita que el parser YAML 1.1 lo interprete como
+# booleano (falso positivo del yaml-language-server de VS Code). GitHub
+# Actions lo acepta igual.
+"on":
   push:
     branches: [main]
   workflow_dispatch:
