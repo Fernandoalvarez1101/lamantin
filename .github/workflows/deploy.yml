@@ -33,6 +33,12 @@ jobs:
       - name: Dependencias
         run: flutter pub get
 
+      - name: Analizar código
+        run: flutter analyze
+
+      - name: Ejecutar tests
+        run: flutter test
+
       - name: Build web
         # IMPORTANTE: /lamantin/ debe coincidir con el NOMBRE del repositorio.
         # GitHub Pages sirve los proyectos en https://<usuario>.github.io/<repo>/

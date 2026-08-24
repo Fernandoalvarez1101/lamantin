@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:lamantin/main.dart';
+import 'package:lamantin/screens/dashboard_screen.dart';
 
 void main() {
+  // Estos tests prueban el dashboard y sus módulos, no la autenticación:
+  // se bombea DashboardScreen directamente (AuthGate está cubierto en
+  // auth_gate_test.dart, que verifica el bloqueo sin sesión).
+  Future<void> pumpApp(WidgetTester tester) async {
+    await tester.pumpWidget(
+      MaterialApp(home: DashboardScreen(onThemeChanged: () {})),
+    );
+  }
+
   testWidgets('El dashboard muestra las secciones principales',
       (WidgetTester tester) async {
-    await tester.pumpWidget(const LamantinApp());
+    await pumpApp(tester);
 
     expect(find.text('Panel de control'), findsOneWidget);
     expect(find.text('Instrumentos'), findsOneWidget);
@@ -17,7 +26,7 @@ void main() {
 
   testWidgets('El módulo Instrumentos muestra las categorías de clasificación',
       (WidgetTester tester) async {
-    await tester.pumpWidget(const LamantinApp());
+    await pumpApp(tester);
 
     await tester.tap(find.text('Instrumentos'));
     await tester.pumpAndSettle();
@@ -31,7 +40,7 @@ void main() {
 
   testWidgets('Al elegir una categoría se muestran sus instrumentos',
       (WidgetTester tester) async {
-    await tester.pumpWidget(const LamantinApp());
+    await pumpApp(tester);
 
     await tester.tap(find.text('Instrumentos'));
     await tester.pumpAndSettle();
@@ -46,7 +55,7 @@ void main() {
 
   testWidgets('El módulo Resultados navega al listado de informes',
       (WidgetTester tester) async {
-    await tester.pumpWidget(const LamantinApp());
+    await pumpApp(tester);
 
     await tester.tap(find.text('Resultados'));
     await tester.pumpAndSettle();
@@ -57,7 +66,7 @@ void main() {
 
   testWidgets('El módulo Pacientes permite registrar un paciente',
       (WidgetTester tester) async {
-    await tester.pumpWidget(const LamantinApp());
+    await pumpApp(tester);
 
     await tester.tap(find.text('Pacientes'));
     await tester.pumpAndSettle();
@@ -79,3 +88,4 @@ void main() {
     expect(find.text('Aún no hay pacientes registrados.'), findsNothing);
   });
 }
+

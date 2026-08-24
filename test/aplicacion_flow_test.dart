@@ -1,11 +1,21 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:lamantin/main.dart';
+import 'package:lamantin/screens/dashboard_screen.dart';
 
 void main() {
+  // Este test prueba el flujo de aplicación de un instrumento desde el
+  // dashboard; se bombea DashboardScreen directamente (AuthGate está cubierto
+  // en auth_gate_test.dart, que verifica el bloqueo sin sesión).
+  Future<void> pumpApp(WidgetTester tester) async {
+    await tester.pumpWidget(
+      MaterialApp(home: DashboardScreen(onThemeChanged: () {})),
+    );
+  }
+
   testWidgets('Flujo PHQ-9: aplicar, responder las 9 preguntas y ver resultado',
       (WidgetTester tester) async {
-    await tester.pumpWidget(const LamantinApp());
+    await pumpApp(tester);
 
     // Navegar: Instrumentos → Depresión → ficha del PHQ-9.
     await tester.tap(find.text('Instrumentos'));
@@ -57,7 +67,7 @@ void main() {
 
   testWidgets('El PHQ-9 muestra la alerta clínica si el ítem 9 es positivo',
       (WidgetTester tester) async {
-    await tester.pumpWidget(const LamantinApp());
+    await pumpApp(tester);
 
     await tester.tap(find.text('Instrumentos'));
     await tester.pumpAndSettle();

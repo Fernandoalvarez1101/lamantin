@@ -7,16 +7,19 @@ import 'widgets/theme_toggle_button.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // Conecta Supabase si está configurada; si no, usa la base local.
+
+  // Si la app no está configurada para Supabase, arrancamos en modo local.
+  // Si la configuración existe pero la red/cliente falla, no hacemos fallback
+  // silencioso: dejamos la app bloqueada y se mostrará un error en AuthGate.
   try {
     await AppRepositorios.inicializar();
   } catch (error, stackTrace) {
-    // Si la inicialización de la nube falla (red, storage, configuración),
-    // la app arranca igual con la base local en vez de quedarse en negro.
-    debugPrint('No se pudo inicializar Supabase, usando base local: $error');
+    debugPrint(
+      'Supabase no disponible; el acceso queda bloqueado hasta elegir offline: $error',
+    );
     debugPrintStack(stackTrace: stackTrace);
-    await AppRepositorios.inicializarLocal();
   }
+
   runApp(const LamantinApp());
 }
 

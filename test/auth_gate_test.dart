@@ -7,13 +7,21 @@ import 'package:lamantin/screens/dashboard_screen.dart';
 
 void main() {
   testWidgets(
-      'AuthGate sin Supabase inicializado cae al dashboard (modo local)',
+      'AuthGate sin Supabase inicializado no deja pasar sin autenticación',
       (tester) async {
-    // En tests no se inicializa Supabase: AuthGate debe detectar que no está
-    // disponible y permitir el acceso directo al dashboard (comportamiento
-    // requerido para que la suite no dependa de la red).
     await tester.pumpWidget(
       MaterialApp(home: AuthGate(onThemeChanged: () {})),
+    );
+
+    expect(find.byType(LoginScreen), findsOneWidget);
+    expect(find.byType(DashboardScreen), findsNothing);
+    expect(find.textContaining('No se pudo iniciar Supabase'), findsOneWidget);
+  });
+
+  testWidgets('AuthGate con modo offline explícito permite entrar al dashboard',
+      (tester) async {
+    await tester.pumpWidget(
+      MaterialApp(home: AuthGate(onThemeChanged: () {}, modoOffline: true)),
     );
 
     expect(find.byType(DashboardScreen), findsOneWidget);

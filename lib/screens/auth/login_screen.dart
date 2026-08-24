@@ -8,9 +8,16 @@ import 'registro_screen.dart';
 
 /// Pantalla de ingreso y registro del profesional (Supabase Auth).
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key, required this.onThemeChanged});
+  const LoginScreen({
+    super.key,
+    required this.onThemeChanged,
+    this.errorMessage,
+    this.onContinueOffline,
+  });
 
   final VoidCallback onThemeChanged;
+  final String? errorMessage;
+  final VoidCallback? onContinueOffline;
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -22,6 +29,20 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _cargando = false;
   bool _ocultarPassword = true;
   String? _error;
+
+  @override
+  void initState() {
+    super.initState();
+    _error = widget.errorMessage;
+  }
+
+  @override
+  void didUpdateWidget(covariant LoginScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.errorMessage != oldWidget.errorMessage) {
+      setState(() => _error = widget.errorMessage);
+    }
+  }
 
   @override
   void dispose() {
@@ -139,6 +160,14 @@ class _LoginScreenState extends State<LoginScreen> {
                             color: theme.colorScheme.error,
                           ),
                           textAlign: TextAlign.center,
+                        ),
+                      ],
+                      if (widget.onContinueOffline != null) ...[
+                        const SizedBox(height: 12),
+                        OutlinedButton.icon(
+                          onPressed: widget.onContinueOffline,
+                          icon: const Icon(Icons.cloud_off_rounded),
+                          label: const Text('Continuar sin conexión'),
                         ),
                       ],
                       const SizedBox(height: 20),
