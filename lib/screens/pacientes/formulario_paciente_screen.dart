@@ -35,6 +35,7 @@ class _FormularioPacienteScreenState extends State<FormularioPacienteScreen> {
   DateTime? _fechaNacimiento;
   String? _sexo;
   bool _guardando = false;
+  String? _errorFecha;
 
   bool get _editando => widget.paciente != null;
 
@@ -68,12 +69,22 @@ class _FormularioPacienteScreenState extends State<FormularioPacienteScreen> {
       helpText: 'Fecha de nacimiento',
     );
     if (elegida != null) {
-      setState(() => _fechaNacimiento = elegida);
+      setState(() {
+        _fechaNacimiento = elegida;
+        _errorFecha = null;
+      });
     }
   }
 
   Future<void> _guardar() async {
-    if (!_formKey.currentState!.validate()) return;
+    final formValido = _formKey.currentState!.validate();
+    setState(() {
+      _errorFecha =
+          (_fechaNacimiento != null && _fechaNacimiento!.isAfter(DateTime.now()))
+              ? 'La fecha no puede ser futura'
+              : null;
+    });
+    if (!formValido || _errorFecha != null) return;
 
     setState(() => _guardando = true);
     final previo = widget.paciente;
@@ -149,10 +160,11 @@ class _FormularioPacienteScreenState extends State<FormularioPacienteScreen> {
                 onTap: _seleccionarFecha,
                 borderRadius: BorderRadius.circular(4),
                 child: InputDecorator(
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     labelText: 'Fecha de nacimiento',
-                    border: OutlineInputBorder(),
-                    suffixIcon: Icon(Icons.calendar_today_outlined),
+                    border: const OutlineInputBorder(),
+                    suffixIcon: const Icon(Icons.calendar_today_outlined),
+                    errorText: _errorFecha,
                   ),
                   child: Text(
                     _fechaNacimiento == null
