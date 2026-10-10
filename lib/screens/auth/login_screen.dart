@@ -4,6 +4,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../widgets/futuristic_button.dart';
 import '../../widgets/glowing_app_logo.dart';
 import '../../widgets/theme_toggle_button.dart';
+import 'recuperar_password_screen.dart';
 import 'registro_screen.dart';
 
 /// Pantalla de ingreso y registro del profesional (Supabase Auth).
@@ -150,6 +151,23 @@ class _LoginScreenState extends State<LoginScreen> {
                             onPressed: () => setState(
                                 () => _ocultarPassword = !_ocultarPassword),
                           ),
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton(
+                          onPressed: _cargando
+                              ? null
+                              : () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute<void>(
+                                      builder: (_) => RecuperarPasswordScreen(
+                                        onThemeChanged: widget.onThemeChanged,
+                                      ),
+                                    ),
+                                  );
+                                },
+                          child: const Text('¿Olvidaste tu contraseña?'),
                         ),
                       ),
                       if (_error != null) ...[

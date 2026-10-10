@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'config/supabase_config.dart';
 import 'repositories/almacen.dart';
 import 'screens/auth/auth_gate.dart';
+import 'services/recuperacion_password.dart';
 import 'theme.dart';
 import 'widgets/theme_toggle_button.dart';
 
@@ -11,13 +13,23 @@ Future<void> main() async {
   // Si la app no está configurada para Supabase, arrancamos en modo local.
   // Si la configuración existe pero la red/cliente falla, no hacemos fallback
   // silencioso: dejamos la app bloqueada y se mostrará un error en AuthGate.
+  var supabaseListo = false;
   try {
     await AppRepositorios.inicializar();
+    supabaseListo = SupabaseConfig.estaConfigurado;
   } catch (error, stackTrace) {
     debugPrint(
       'Supabase no disponible; el acceso queda bloqueado hasta elegir offline: $error',
     );
     debugPrintStack(stackTrace: stackTrace);
+  }
+
+  // El enlace de recuperación de contraseña se canjea antes de mostrar la app,
+  // porque en web la URL se consume durante la inicialización de Supabase. Si
+  // el enlace era de recuperación, AuthGate mostrará la pantalla para elegir
+  // una contraseña nueva.
+  if (supabaseListo) {
+    await RecuperacionPassword.procesarCallbackWeb();
   }
 
   runApp(const LamantinApp());

@@ -21,6 +21,9 @@ dependencies:
   pdf: ^3.13.0
   printing: ^5.15.0
   supabase_flutter: ^2.17.2
+  # Se usa para limpiar la barra de direcciones tras el callback de
+  # recuperación de contraseña (ver lib/services/limpiar_url_web.dart).
+  web: ^1.1.1
 
 dev_dependencies:
   flutter_test:

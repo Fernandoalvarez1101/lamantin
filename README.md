@@ -100,9 +100,16 @@ Pasos (la primera vez):
 3. Activar Pages: **Settings → Pages → Source: *GitHub Actions***. El workflow
    compila (`flutter build web --release --base-href=/lamantin/`) y publica
    `build/web` automáticamente en cada push a `main`.
-4. En Supabase: **Authentication → URL Configuration → Site URL** =
-   `https://<usuario>.github.io/lamantin/` (para que los enlaces de correo
-   apunten a la app publicada).
+4. En Supabase: **Authentication → URL Configuration**:
+
+   - **Site URL** = `https://<usuario>.github.io/lamantin/`
+   - **Redirect URLs** = agregar `https://<usuario>.github.io/lamantin/**` y,
+     para probar en desarrollo, `http://localhost:8081/**`.
+
+   Si el `redirect_to` no está en la allowlist, Supabase **no da error**: lo
+   ignora y usa la Site URL. Por eso los enlaces de correo (confirmación de
+   cuenta y recuperación de contraseña) funcionan en producción aunque falte,
+   pero en desarrollo vuelven a la URL publicada en vez de a `localhost`.
 5. Abrir la URL publicada, registrarse, confirmar el correo y probar el flujo
    completo (paciente → instrumento → sesión → informe).
 
@@ -114,5 +121,9 @@ Notas:
 - Los datos de los pacientes están aislados por profesional (RLS por
   `profesional_id` en Supabase) y la sesión persiste en el navegador
   (`localStorage`).
+- La recuperación de contraseña usa el flujo PKCE, así que el enlace del correo
+  debe abrirse en el **mismo navegador** donde se pidió el cambio (el verificador
+  se guarda en `localStorage`). Si se abre en otro, el login muestra el aviso
+  correspondiente.
 
 

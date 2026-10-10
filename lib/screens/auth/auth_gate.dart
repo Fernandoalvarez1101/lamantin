@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../repositories/almacen.dart';
+import '../../services/recuperacion_password.dart';
 import '../dashboard_screen.dart';
 import 'login_screen.dart';
+import 'nueva_password_screen.dart';
 
 /// Decide si mostrar el login o el dashboard según la sesión de Supabase.
 ///
@@ -30,12 +32,17 @@ class _AuthGateState extends State<AuthGate> {
   bool _supabaseDisponible = true;
   bool _autenticado = false;
   bool _modoOffline = false;
+  String? _errorEnlace;
   StreamSubscription<AuthState>? _suscripcionAuth;
 
   @override
   void initState() {
     super.initState();
     _modoOffline = widget.modoOffline;
+    // Si el enlace del correo no se pudo canjear (venció o se abrió en otro
+    // navegador), el motivo se muestra una sola vez en el login.
+    _errorEnlace = RecuperacionPassword.error;
+    RecuperacionPassword.error = null;
     try {
       final auth = Supabase.instance.client.auth;
       // Primero nos suscribimos a los cambios de sesión y después leemos la
@@ -43,6 +50,11 @@ class _AuthGateState extends State<AuthGate> {
       // pudiera emitirse entre ambas operaciones.
       _suscripcionAuth = auth.onAuthStateChange.listen((data) {
         if (!mounted) return;
+        // En móvil y escritorio el evento llega después de inicializar. En web
+        // el callback se detecta en `main` antes de mostrar la app.
+        if (data.event == AuthChangeEvent.passwordRecovery) {
+          RecuperacionPassword.pendiente = true;
+        }
         setState(() => _autenticado = data.session != null);
       });
       _autenticado = auth.currentSession != null;
@@ -69,8 +81,24 @@ class _AuthGateState extends State<AuthGate> {
     setState(() => _modoOffline = true);
   }
 
+  /// Cierra el flujo de recuperación de contraseña (ya sea porque el
+  /// profesional guardó la contraseña nueva o porque canceló).
+  void _cerrarRecuperacion() {
+    if (!mounted) return;
+    setState(RecuperacionPassword.finalizar);
+  }
+
   @override
   Widget build(BuildContext context) {
+    // El profesional volvió desde el enlace del correo: antes de entrar tiene
+    // que elegir una contraseña nueva.
+    if (RecuperacionPassword.pendiente) {
+      return NuevaPasswordScreen(
+        onThemeChanged: widget.onThemeChanged,
+        onListo: _cerrarRecuperacion,
+      );
+    }
+
     if ((_modoOffline || widget.modoOffline) && !_supabaseDisponible) {
       return DashboardScreen(onThemeChanged: widget.onThemeChanged);
     }
@@ -88,6 +116,9 @@ class _AuthGateState extends State<AuthGate> {
       );
     }
 
-    return LoginScreen(onThemeChanged: widget.onThemeChanged);
+    return LoginScreen(
+      onThemeChanged: widget.onThemeChanged,
+      errorMessage: _errorEnlace,
+    );
   }
 }
