@@ -100,16 +100,23 @@ Pasos (la primera vez):
 3. Activar Pages: **Settings → Pages → Source: *GitHub Actions***. El workflow
    compila (`flutter build web --release --base-href=/lamantin/`) y publica
    `build/web` automáticamente en cada push a `main`.
-4. En Supabase: **Authentication → URL Configuration**:
+4. En Supabase: **Authentication → URL Configuration** (ya configurado en el
+   proyecto `hfvxxngrtayjqbgfsmif`):
 
-   - **Site URL** = `https://<usuario>.github.io/lamantin/`
-   - **Redirect URLs** = agregar `https://<usuario>.github.io/lamantin/**` y,
-     para probar en desarrollo, `http://localhost:8081/**`.
+   - **Site URL** = `https://fernandoalvarez1101.github.io/lamantin/`
+   - **Redirect URLs** = `https://fernandoalvarez1101.github.io/lamantin/**`,
+     `http://localhost:8080/**` y `http://localhost:8081/**`.
 
-   Si el `redirect_to` no está en la allowlist, Supabase **no da error**: lo
-   ignora y usa la Site URL. Por eso los enlaces de correo (confirmación de
-   cuenta y recuperación de contraseña) funcionan en producción aunque falte,
-   pero en desarrollo vuelven a la URL publicada en vez de a `localhost`.
+   > ⚠️ Cuidado con la **Site URL**: es el *fallback* de todos los enlaces de
+   > correo. Si el `redirect_to` no está en la allowlist, Supabase **no da
+   > error**: lo ignora y usa la Site URL. Con el valor por defecto de un
+   > proyecto nuevo (`http://localhost:3000`) los enlaces de confirmación de
+   > cuenta y de recuperación de contraseña llegan a un sitio muerto, así que
+   > conviene revisarla al crear el proyecto. Se puede consultar y corregir sin
+   > abrir el dashboard con `GET`/`PATCH` a
+   > `https://api.supabase.com/v1/projects/<ref>/config/auth`, que acepta los
+   > campos `site_url` y `uri_allow_list` (lista separada por comas) y **solo**
+   > modifica esos campos.
 5. Abrir la URL publicada, registrarse, confirmar el correo y probar el flujo
    completo (paciente → instrumento → sesión → informe).
 
