@@ -5,6 +5,7 @@ import 'package:lamantin/data/aplicaciones/bai.dart';
 import 'package:lamantin/data/aplicaciones/gbjws.dart';
 import 'package:lamantin/data/aplicaciones/ius12.dart';
 import 'package:lamantin/data/aplicaciones/mmpi2.dart';
+import 'package:lamantin/data/aplicaciones/mmpi2_respuestas.dart';
 import 'package:lamantin/data/aplicaciones/registro_aplicaciones.dart';
 import 'package:lamantin/data/aplicaciones/rotter_locus.dart';
 import 'package:lamantin/data/aplicaciones/rses.dart';
@@ -98,10 +99,10 @@ void main() {
       expect(find.text('Rango: 10–40'), findsOneWidget);
     });
 
-    testWidgets('MMPI-2 llega al resultado con sus 14 escalas elevadas',
+    testWidgets('MMPI-2 llega al resultado con sus 62 escalas elevadas',
         (WidgetTester tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
+        MaterialApp(
           home: AplicacionInstrumentoScreen(instrumento: mmpi2Aplicable),
         ),
       );
@@ -138,7 +139,39 @@ void main() {
           reason: '${subescala.nombre} no aparece en el resultado',
         );
       }
-      expect(find.text('Elevación clínica'), findsNWidgets(14));
+      expect(
+        find.text('Elevación clínica'),
+        findsNWidgets(mmpi2Aplicable.subescalas.length),
+      );
+    });
+
+    testWidgets('La hoja de respuestas del MMPI-2 pide los 567 ítems V/F',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: AplicacionInstrumentoScreen(
+            instrumento: mmpi2RespuestasAplicable,
+          ),
+        ),
+      );
+
+      expect(find.text(mmpi2RespuestasAplicable.titulo), findsOneWidget);
+
+      await tester.tap(find.text('Comenzar'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Pregunta 1 de 567'), findsOneWidget);
+      expect(find.text('Ítem 1'), findsOneWidget);
+      expect(find.text('V · Verdadero'), findsOneWidget);
+      expect(find.text('F · Falso'), findsOneWidget);
+
+      await tester.tap(find.text('V · Verdadero'));
+      await tester.pump();
+      await tester.tap(find.text('Siguiente'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Pregunta 2 de 567'), findsOneWidget);
+      expect(find.text('Ítem 2'), findsOneWidget);
     });
   });
 
@@ -148,7 +181,7 @@ void main() {
     const esperados = <String, List<String>>{
       'Ansiedad': ['BAI', 'IUS-12'],
       'Creencias y esquemas cognitivos': ['Rotter I-E', 'GBJWS'],
-      'Personalidad': ['MMPI-2'],
+      'Personalidad': ['MMPI-2', 'MMPI-2 · respuestas'],
     };
 
     await tester.pumpWidget(

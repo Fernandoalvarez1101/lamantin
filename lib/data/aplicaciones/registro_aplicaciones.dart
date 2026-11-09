@@ -28,6 +28,7 @@ import 'lotr.dart';
 import 'maas.dart';
 import 'mfq.dart';
 import 'mmpi2.dart';
+import 'mmpi2_respuestas.dart';
 import 'moca.dart';
 import 'mspss.dart';
 import 'onet_ip.dart';
@@ -55,7 +56,7 @@ import 'zung_sds.dart';
 /// Registro de instrumentos con aplicación completa disponible.
 ///
 /// La clave coincide con el identificador del catálogo (`Instrumento.id`).
-const Map<String, InstrumentoAplicable> aplicacionesDisponibles = {
+final Map<String, InstrumentoAplicable> aplicacionesDisponibles = {
   // Depresión
   'phq-9': phq9Aplicable,
   'ces-d': cesdAplicable,
@@ -115,6 +116,7 @@ const Map<String, InstrumentoAplicable> aplicacionesDisponibles = {
   'bfi-44': bfi44Aplicable,
   'ipip-neo-120': ipipNeo120Aplicable,
   'mmpi-2': mmpi2Aplicable,
+  'mmpi-2-respuestas': mmpi2RespuestasAplicable,
   // Atención y concentración
   'asrs-v1-1': asrsAplicable,
   // Neurocognitivo

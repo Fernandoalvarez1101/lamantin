@@ -466,6 +466,26 @@ const List<Instrumento> catalogoInstrumentos = [
         'ítems) y MMPI-A (adolescentes) con baremos propios.',
   ),
 
+  Instrumento(
+    id: 'mmpi-2-respuestas',
+    nombre: 'MMPI-2: hoja de respuestas',
+    sigla: 'MMPI-2 · respuestas',
+    categoria: CategoriaInstrumento.personalidad,
+    descripcion: 'Hoja de respuestas digital de los 567 ítems '
+        'Verdadero/Falso del MMPI-2, con la plantilla completa de respuestas '
+        'al finalizar para calificar con la clave oficial.',
+    autor: 'Hathaway, McKinley y colaboradores (University of Minnesota Press)',
+    anio: 1989,
+    numeroItems: 567,
+    tiempo: '60-90 min',
+    disponibilidad: 'Requiere licencia (Pearson)',
+    poblacion: 'Adultos (18 años o más; lectura de nivel de secundaria)',
+    nota: 'No contiene los reactivos: el evaluado los lee en el cuadernillo '
+        'oficial y el profesional transcribe sus marcas V/F. Se complementa '
+        'con «MMPI-2 (hoja de puntuación)», donde se registra el corte T ≥ 65 '
+        'de las 62 escalas del perfil.',
+  ),
+
   // ─────────────────────── BIENESTAR Y CALIDAD DE VIDA ───────────────────────
   Instrumento(
     id: 'swls',

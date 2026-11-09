@@ -106,6 +106,7 @@ class InstrumentoAplicable {
     this.calcularPuntuacionPersonalizada,
     this.subescalas = const [],
     this.mostrarPuntuacionTotal = true,
+    this.mostrarPlantillaRespuestas = false,
   });
 
   /// Identificador que coincide con el catálogo (`Instrumento.id`).
@@ -154,6 +155,15 @@ class InstrumentoAplicable {
   /// Se desactiva en instrumentos cuya puntuación total no es clínicamente
   /// interpretable (p. ej. el PANAS, que se lee por subescalas).
   final bool mostrarPuntuacionTotal;
+
+  /// Indica si la pantalla de resultados debe mostrar la plantilla de
+  /// respuestas ítem por ítem (número de ítem y opción elegida).
+  ///
+  /// Se usa en instrumentos cuya calificación se hace fuera de la app, como
+  /// la hoja de respuestas del MMPI-2: la app registra las marcas
+  /// Verdadero/Falso y el profesional las traslada a su hoja de perfil o a la
+  /// plataforma licenciada del editor.
+  final bool mostrarPlantillaRespuestas;
 
   /// Cantidad total de preguntas (puntuables + complementarias).
   int get totalPreguntas => preguntas.length + preguntasComplementarias.length;

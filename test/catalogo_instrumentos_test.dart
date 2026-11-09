@@ -109,5 +109,24 @@ void main() {
     expect(aplicacion, isNotNull);
     expect(aplicacion!.mostrarPuntuacionTotal, isFalse);
     expect(aplicacion.subescalas, isNotEmpty);
+    expect(aplicacion.subescalas, hasLength(62));
+  });
+
+  test('La hoja de respuestas del MMPI-2 recoge los 567 ítems V/F', () {
+    final hoja =
+        catalogoInstrumentos.firstWhere((i) => i.id == 'mmpi-2-respuestas');
+
+    expect(hoja.sigla, 'MMPI-2 · respuestas');
+    expect(hoja.categoria, CategoriaInstrumento.personalidad);
+    expect(hoja.numeroItems, 567);
+    expect(hoja.disponibilidad, contains('licencia'));
+
+    final aplicacion = aplicacionDe('mmpi-2-respuestas');
+    expect(aplicacion, isNotNull);
+    expect(aplicacion!.preguntas, hasLength(567));
+    expect(aplicacion.mostrarPuntuacionTotal, isFalse);
+    // La calificación se hace fuera: la app entrega la plantilla de respuestas.
+    expect(aplicacion.mostrarPlantillaRespuestas, isTrue);
+    expect(aplicacion.subescalas, isEmpty);
   });
 }

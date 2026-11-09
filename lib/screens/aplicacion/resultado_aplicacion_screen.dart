@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../models/instrumento_aplicable.dart';
 import '../../models/paciente.dart';
@@ -132,6 +133,14 @@ class ResultadoAplicacionScreen extends StatelessWidget {
                 _TarjetaSubescala(subescala: subescala),
                 const SizedBox(height: 12),
               ],
+            ],
+            if (instrumento.mostrarPlantillaRespuestas &&
+                respuestas.isNotEmpty) ...[
+              const SizedBox(height: 16),
+              _TarjetaPlantillaRespuestas(
+                instrumento: instrumento,
+                respuestas: respuestas,
+              ),
             ],
             if (resultado.tieneAlertas) ...[
               const SizedBox(height: 16),
@@ -433,6 +442,138 @@ class _TarjetaSubescala extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
             ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Tarjeta con la plantilla de respuestas ítem por ítem.
+///
+/// Se muestra en instrumentos cuya calificación se hace fuera de la app
+/// (p. ej. la hoja de respuestas del MMPI-2): el profesional traslada estas
+/// marcas a su hoja de perfil o a la plataforma licenciada del editor.
+class _TarjetaPlantillaRespuestas extends StatelessWidget {
+  const _TarjetaPlantillaRespuestas({
+    required this.instrumento,
+    required this.respuestas,
+  });
+
+  final InstrumentoAplicable instrumento;
+
+  /// Valores de respuesta a las preguntas puntuables, en orden.
+  final List<int> respuestas;
+
+  /// Cantidad de pares «ítem + marca» que se muestran por línea.
+  static const int _paresPorLinea = 6;
+
+  /// Plantilla en texto plano: número de ítem y marca elegida (p. ej. `  1 V`).
+  String get plantilla {
+    final marcas = <String>[
+      for (var i = 0; i < respuestas.length; i++)
+        '${(i + 1).toString().padLeft(3)} '
+            '${_marca(instrumento.preguntas[i], respuestas[i])}',
+    ];
+
+    final lineas = <String>[];
+    for (var i = 0; i < marcas.length; i += _paresPorLinea) {
+      final fin = (i + _paresPorLinea) > marcas.length
+          ? marcas.length
+          : i + _paresPorLinea;
+      lineas.add(marcas.sublist(i, fin).join('    '));
+    }
+    return lineas.join('\n');
+  }
+
+  /// Marca corta de la opción elegida (p. ej. la «V» de «V · Verdadero»).
+  String _marca(Pregunta pregunta, int valor) {
+    for (final opcion in pregunta.opciones) {
+      if (opcion.valor != valor) continue;
+      final etiqueta = opcion.etiqueta;
+      if (etiqueta.contains(' · ')) return etiqueta.split(' · ').first;
+      return etiqueta.isEmpty
+          ? '$valor'
+          : etiqueta.substring(0, 1).toUpperCase();
+    }
+    return '$valor';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
+
+    return Card(
+      elevation: 2,
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(Icons.grid_on_outlined, color: theme.colorScheme.primary),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    'Plantilla de respuestas',
+                    style: textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Traslade estas marcas a la hoja de perfil oficial para '
+              'calificar con la clave del editor. V = Verdadero · '
+              'F = Falso.',
+              style: textTheme.bodyMedium,
+            ),
+            const SizedBox(height: 12),
+            Text(
+              '${respuestas.length} ítems registrados',
+              style: textTheme.labelLarge?.copyWith(
+                color: theme.colorScheme.primary,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: theme.colorScheme.surfaceContainerHighest,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: SelectableText(
+                  plantilla,
+                  style: const TextStyle(
+                    fontFamily: 'monospace',
+                    fontSize: 13,
+                    height: 1.6,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 8),
+            Align(
+              alignment: Alignment.centerRight,
+              child: TextButton.icon(
+                onPressed: () async {
+                  final messenger = ScaffoldMessenger.of(context);
+                  await Clipboard.setData(ClipboardData(text: plantilla));
+                  messenger.showSnackBar(
+                    const SnackBar(content: Text('Plantilla copiada')),
+                  );
+                },
+                icon: const Icon(Icons.copy_all_outlined),
+                label: const Text('Copiar plantilla'),
+              ),
+            ),
           ],
         ),
       ),
