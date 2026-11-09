@@ -45,3 +45,7 @@ app.*.map.json
 # Supabase CLI local state (refs y urls internas del proyecto vinculado)
 /supabase/.temp/
 
+# Archivos auxiliares de ejecución local (logs de flutter run y scripts sueltos)
+/flutter_run_log.txt
+/flutter_run_err.txt
+/yls_test.js
