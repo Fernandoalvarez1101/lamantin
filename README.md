@@ -79,6 +79,25 @@ lib/
 - **Sesiones**: historial de aplicaciones realizadas.
 - **Resultados**: puntuaciones e interpretaciones clínicas.
 
+## Próximos pasos
+
+1. **MMPI-2-RF (338 ítems) y MMPI-A (478 ítems)**: replicar el par de piezas ya
+   disponible para el MMPI-2 (hoja de respuestas numerada + hoja de puntuación
+   por escala), con las escalas propias de cada versión.
+2. **Subescalas del MMPI-2**: Harris-Lingoes (D1-D5, Hy1-Hy5, Pd1-Pd5, Pa1-Pa3,
+   Sc1-Sc6, Ma1-Ma4, Si1-Si4), subescalas de contenido y subescalas de Si, como
+   subescalas opcionales de la hoja de puntuación.
+3. **Comentario por escala**: campo de texto libre en cada escala elevada para
+   registrar la interpretación del profesional, útil en prácticas y en el
+   informe de la sesión.
+4. **Control de omisiones**: al terminar la hoja de respuestas de 567 ítems,
+   listar los ítems sin responder antes de generar la plantilla, porque el
+   MMPI-2 penaliza las omisiones en las escalas de validez.
+5. **Exportación**: descargar la plantilla de respuestas en CSV o PDF y el
+   perfil de escalas en PDF, además del botón «Copiar plantilla» actual.
+6. **Revisión clínica de la lista de escalas**: contrastar siglas y nombres en
+   español de las 62 escalas con el manual antes de usarla en docencia.
+
 ## Desarrollo
 
 ```bash
