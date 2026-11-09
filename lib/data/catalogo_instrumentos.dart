@@ -154,6 +154,40 @@ const List<Instrumento> catalogoInstrumentos = [
     poblacion: 'Adultos',
   ),
 
+  Instrumento(
+    id: 'bai',
+    nombre: 'Inventario de Ansiedad de Beck',
+    sigla: 'BAI',
+    categoria: CategoriaInstrumento.ansiedad,
+    descripcion: 'Mide la gravedad de los síntomas de ansiedad (somáticos, '
+        'cognitivos y emocionales) durante la última semana.',
+    autor: 'Beck, Epstein, Brown y Steer',
+    anio: 1988,
+    numeroItems: 21,
+    tiempo: '5-10 min',
+    disponibilidad: 'Requiere licencia (Pearson)',
+    poblacion: 'Adultos y adolescentes',
+    nota: 'Distingue el perfil de síntomas físicos y cognitivos. En población '
+        'mexicana se reporta un alfa de Cronbach de .83.',
+  ),
+  Instrumento(
+    id: 'ius-12',
+    nombre: 'Escala de Intolerancia a la Incertidumbre (versión abreviada)',
+    sigla: 'IUS-12',
+    categoria: CategoriaInstrumento.ansiedad,
+    descripcion: 'Mide la incapacidad de tolerar situaciones ambiguas o '
+        'impredecibles, con subescalas de ansiedad prospectiva e '
+        'inhibitoria.',
+    autor: 'Carleton, Norton y Asmundson',
+    anio: 2007,
+    numeroItems: 12,
+    tiempo: '3-5 min',
+    disponibilidad: 'Libre uso en investigación con cita',
+    poblacion: 'Adultos',
+    nota: 'Versión abreviada de la IUS de 27 ítems. La versión en español '
+        'reporta un alfa de Cronbach de .85.',
+  ),
+
   // ───────────────────────────── ESTRÉS ─────────────────────────────
   Instrumento(
     id: 'pss-10',
@@ -251,6 +285,44 @@ const List<Instrumento> catalogoInstrumentos = [
     tiempo: '2-3 min',
     disponibilidad: 'Libre uso',
     poblacion: 'Adolescentes y adultos',
+    nota: 'En universitarios mexicanos se han reportado alfas de Cronbach '
+        'entre .85 y .88.',
+  ),
+
+  // ───────────────── CREENCIAS Y ESQUEMAS COGNITIVOS ─────────────────
+  Instrumento(
+    id: 'rotter-locus',
+    nombre: 'Escala de Locus de Control de Rotter',
+    sigla: 'Rotter I-E',
+    categoria: CategoriaInstrumento.creencias,
+    descripcion: 'Evalúa si la persona atribuye los resultados de su vida a '
+        'sus propias acciones (control interno) o a factores externos como '
+        'la suerte, el destino o el poder de otros (control externo).',
+    autor: 'Julian B. Rotter',
+    anio: 1966,
+    numeroItems: 29,
+    tiempo: '10-15 min',
+    disponibilidad: 'Libre uso en investigación con cita',
+    poblacion: 'Adultos',
+    nota: 'Elección forzada: 23 pares puntuables (0-23, a mayor puntuación '
+        'mayor externalidad) y 6 pares de relleno. Analizada y validada en '
+        'universitarios mexicanos.',
+  ),
+  Instrumento(
+    id: 'gbjws',
+    nombre: 'Escala de Creencia Global en un Mundo Justo',
+    sigla: 'GBJWS',
+    categoria: CategoriaInstrumento.creencias,
+    descripcion: 'Mide la creencia de que el mundo es un lugar justo donde '
+        'las personas reciben lo que merecen.',
+    autor: 'Isaac M. Lipkus',
+    anio: 1991,
+    numeroItems: 7,
+    tiempo: '2-3 min',
+    disponibilidad: 'Libre uso en investigación con cita',
+    poblacion: 'Adultos',
+    nota: 'Siete ítems en formato Likert de 6 puntos; a mayor puntuación, '
+        'mayor creencia en un mundo justo.',
   ),
 
   // ───────────────────────────── SUEÑO ─────────────────────────────

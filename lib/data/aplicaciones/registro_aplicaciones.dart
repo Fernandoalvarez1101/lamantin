@@ -2,6 +2,7 @@ import '../../models/instrumento_aplicable.dart';
 import 'asrs.dart';
 import 'assist.dart';
 import 'audit.dart';
+import 'bai.dart';
 import 'bfi44.dart';
 import 'cage.dart';
 import 'cesd.dart';
@@ -16,10 +17,12 @@ import 'epds.dart';
 import 'erq.dart';
 import 'escala_florecimiento.dart';
 import 'gad7.dart';
+import 'gbjws.dart';
 import 'gds15.dart';
 import 'iesr.dart';
 import 'isi.dart';
 import 'ipip_neo120.dart';
+import 'ius12.dart';
 import 'k10.dart';
 import 'lotr.dart';
 import 'maas.dart';
@@ -33,6 +36,7 @@ import 'panas.dart';
 import 'psqi.dart';
 import 'pss10.dart';
 import 'pswq.dart';
+import 'rotter_locus.dart';
 import 'rses.dart';
 import 'sbqr.dart';
 import 'scared.dart';
@@ -63,6 +67,8 @@ const Map<String, InstrumentoAplicable> aplicacionesDisponibles = {
   'zung-sas': zungSasAplicable,
   'spin': spinAplicable,
   'pswq': pswqAplicable,
+  'bai': baiAplicable,
+  'ius-12': ius12Aplicable,
   // Estrés
   'pss-10': pss10Aplicable,
   // Trauma y TEPT
@@ -101,6 +107,9 @@ const Map<String, InstrumentoAplicable> aplicacionesDisponibles = {
   'onet-ip': onetIpAplicable,
   // Autoestima
   'rses': rsesAplicable,
+  // Creencias y esquemas cognitivos
+  'rotter-locus': rotterLocusAplicable,
+  'gbjws': gbjwsAplicable,
   // Personalidad
   'bfi-44': bfi44Aplicable,
   'ipip-neo-120': ipipNeo120Aplicable,

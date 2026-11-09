@@ -1,6 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:lamantin/data/aplicaciones/bai.dart';
 import 'package:lamantin/data/aplicaciones/gad7.dart';
+import 'package:lamantin/data/aplicaciones/ius12.dart';
 import 'package:lamantin/data/aplicaciones/pswq.dart';
 import 'package:lamantin/data/aplicaciones/spin.dart';
 import 'package:lamantin/data/aplicaciones/zung_sas.dart';
@@ -31,6 +33,84 @@ void main() {
       );
       expect(r3.total, 10);
       expect(r3.rango.etiqueta, 'Moderada');
+    });
+  });
+
+  group('BAI', () {
+    test('Tiene 21 preguntas con 4 opciones de malestar', () {
+      expect(baiAplicable.preguntas.length, 21);
+      for (final pregunta in baiAplicable.preguntas) {
+        expect(pregunta.opciones.length, 4);
+        expect(pregunta.opciones.first.valor, 0);
+        expect(pregunta.opciones.last.valor, 3);
+      }
+    });
+
+    test('Puntúa en el rango 0-63 con los cortes de gravedad', () {
+      final r = puntuarInstrumento(baiAplicable, List.filled(21, 0));
+      expect(r.total, 0);
+      expect(r.rango.etiqueta, 'Mínima');
+
+      // 8 puntos: primer nivel de ansiedad leve.
+      final r2 = puntuarInstrumento(
+          baiAplicable, List.filled(8, 1) + List.filled(13, 0));
+      expect(r2.total, 8);
+      expect(r2.rango.etiqueta, 'Leve');
+
+      // 25 puntos: límite superior de ansiedad moderada.
+      final r3 = puntuarInstrumento(
+        baiAplicable,
+        List.filled(5, 3) + List.filled(5, 2) + List.filled(11, 0),
+      );
+      expect(r3.total, 25);
+      expect(r3.rango.etiqueta, 'Moderada');
+
+      final r4 = puntuarInstrumento(baiAplicable, List.filled(21, 3));
+      expect(r4.total, 63);
+      expect(r4.rango.etiqueta, 'Grave');
+    });
+  });
+
+  group('IUS-12', () {
+    test('Tiene 12 preguntas con 5 opciones y dos subescalas', () {
+      expect(ius12Aplicable.preguntas.length, 12);
+      for (final pregunta in ius12Aplicable.preguntas) {
+        expect(pregunta.opciones.length, 5);
+        expect(pregunta.opciones.first.valor, 1);
+        expect(pregunta.opciones.last.valor, 5);
+      }
+      expect(ius12Aplicable.subescalas.length, 2);
+      expect(ius12Aplicable.subescalas[0].indicesPregunta.length, 7);
+      expect(ius12Aplicable.subescalas[1].indicesPregunta.length, 5);
+    });
+
+    test('Puntúa en el rango 12-60 y desglosa las subescalas', () {
+      final r = puntuarInstrumento(ius12Aplicable, List.filled(12, 1));
+      expect(r.total, 12);
+      expect(r.rango.descriptiva, isTrue);
+      final prospectivaBaja =
+          r.subescalas.firstWhere((s) => s.nombre == 'Ansiedad prospectiva');
+      final inhibitoriaBaja =
+          r.subescalas.firstWhere((s) => s.nombre == 'Ansiedad inhibitoria');
+      expect(prospectivaBaja.total, 7);
+      expect(inhibitoriaBaja.total, 5);
+      expect(prospectivaBaja.rango.descriptiva, isTrue);
+      expect(inhibitoriaBaja.rango.descriptiva, isTrue);
+
+      final r2 = puntuarInstrumento(ius12Aplicable, List.filled(12, 5));
+      expect(r2.total, 60);
+      expect(
+        r2.subescalas
+            .firstWhere((s) => s.nombre == 'Ansiedad prospectiva')
+            .total,
+        35,
+      );
+      expect(
+        r2.subescalas
+            .firstWhere((s) => s.nombre == 'Ansiedad inhibitoria')
+            .total,
+        25,
+      );
     });
   });
 

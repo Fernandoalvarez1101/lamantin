@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:lamantin/data/aplicaciones/registro_aplicaciones.dart';
 import 'package:lamantin/data/catalogo_instrumentos.dart';
 import 'package:lamantin/models/categoria_instrumento.dart';
 
@@ -52,5 +53,43 @@ void main() {
     expect(moca.categoria, CategoriaInstrumento.neurocognitivo);
     expect(sdq.categoria, CategoriaInstrumento.infantoJuvenil);
     expect(assist.categoria, CategoriaInstrumento.adicciones);
+  });
+
+  test('La ansiedad incluye el BAI y el IUS-12, ambos aplicables', () {
+    final bai = catalogoInstrumentos.firstWhere((i) => i.id == 'bai');
+    final ius = catalogoInstrumentos.firstWhere((i) => i.id == 'ius-12');
+
+    expect(bai.sigla, 'BAI');
+    expect(bai.categoria, CategoriaInstrumento.ansiedad);
+    expect(bai.numeroItems, 21);
+    expect(ius.sigla, 'IUS-12');
+    expect(ius.categoria, CategoriaInstrumento.ansiedad);
+    expect(ius.numeroItems, 12);
+
+    expect(aplicacionDe('bai'), isNotNull);
+    expect(aplicacionDe('ius-12'), isNotNull);
+  });
+
+  test('La categoría de creencias incluye Rotter y el GBJWS', () {
+    final ids = instrumentosDeCategoria(CategoriaInstrumento.creencias)
+        .map((i) => i.id)
+        .toList();
+
+    expect(ids, containsAll(<String>['rotter-locus', 'gbjws']));
+    expect(aplicacionDe('rotter-locus'), isNotNull);
+    expect(aplicacionDe('gbjws'), isNotNull);
+  });
+
+  test('Toda aplicación registrada corresponde a un instrumento del catálogo',
+      () {
+    final idsCatalogo = catalogoInstrumentos.map((i) => i.id).toSet();
+
+    for (final id in aplicacionesDisponibles.keys) {
+      expect(
+        idsCatalogo.contains(id),
+        isTrue,
+        reason: 'La aplicación «$id» no existe en el catálogo.',
+      );
+    }
   });
 }

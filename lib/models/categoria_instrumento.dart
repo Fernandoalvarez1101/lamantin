@@ -9,6 +9,7 @@ enum CategoriaInstrumento {
   trauma('Trauma y TEPT'),
   vocacional('Vocacional'),
   autoestima('Autoestima y autoconcepto'),
+  creencias('Creencias y esquemas cognitivos'),
   sueno('Sueño'),
   adicciones('Adicciones'),
   personalidad('Personalidad'),

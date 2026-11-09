@@ -19,6 +19,7 @@ Color colorDeCategoria(CategoriaInstrumento categoria) {
     case CategoriaInstrumento.atencion:
     case CategoriaInstrumento.infantoJuvenil:
     case CategoriaInstrumento.neurocognitivo:
+    case CategoriaInstrumento.creencias:
       return LamantinColors.slateBlueSecondary;
     case CategoriaInstrumento.estres:
     case CategoriaInstrumento.autoestima:
@@ -66,5 +67,7 @@ IconData iconoDeCategoria(CategoriaInstrumento categoria) {
       return Icons.psychology_alt_outlined;
     case CategoriaInstrumento.neurocognitivo:
       return Icons.memory_outlined;
+    case CategoriaInstrumento.creencias:
+      return Icons.insights_outlined;
   }
 }

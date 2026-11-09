@@ -119,10 +119,14 @@ class _TarjetaCategoria extends StatelessWidget {
                 child: Icon(iconoDeCategoria(categoria), size: 24),
               ),
               const SizedBox(height: 10),
-              Text(
-                categoria.nombre,
-                style: textTheme.titleMedium
-                    ?.copyWith(fontWeight: FontWeight.bold),
+              Flexible(
+                child: Text(
+                  categoria.nombre,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                  style: textTheme.titleMedium
+                      ?.copyWith(fontWeight: FontWeight.bold),
+                ),
               ),
               const SizedBox(height: 2),
               Text(
