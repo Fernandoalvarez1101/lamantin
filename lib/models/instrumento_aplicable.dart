@@ -167,4 +167,38 @@ class InstrumentoAplicable {
 
   /// Cantidad total de preguntas (puntuables + complementarias).
   int get totalPreguntas => preguntas.length + preguntasComplementarias.length;
+
+  /// Devuelve una copia de este instrumento con el texto de las preguntas
+  /// sustituido por el del mapa [textos] (clave = número de ítem, base 1).
+  ///
+  /// Los ítems que no figuren en [textos] conservan su texto original. Se usa
+  /// en la hoja de respuestas del MMPI-2 para que el profesional cargue los
+  /// reactivos desde un archivo local sin publicarlos.
+  InstrumentoAplicable conTextosDePregunta(Map<int, String> textos) {
+    return InstrumentoAplicable(
+      id: id,
+      sigla: sigla,
+      titulo: titulo,
+      instrucciones: instrucciones,
+      nota: nota,
+      preguntas: [
+        for (var i = 0; i < preguntas.length; i++)
+          Pregunta(
+            texto: textos.containsKey(i + 1)
+                ? '${i + 1}. ${textos[i + 1]}'
+                : preguntas[i].texto,
+            opciones: preguntas[i].opciones,
+            invertida: preguntas[i].invertida,
+            puntuable: preguntas[i].puntuable,
+          ),
+      ],
+      rangos: rangos,
+      alertas: alertas,
+      preguntasComplementarias: preguntasComplementarias,
+      calcularPuntuacionPersonalizada: calcularPuntuacionPersonalizada,
+      subescalas: subescalas,
+      mostrarPuntuacionTotal: mostrarPuntuacionTotal,
+      mostrarPlantillaRespuestas: mostrarPlantillaRespuestas,
+    );
+  }
 }

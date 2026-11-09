@@ -49,3 +49,7 @@ app.*.map.json
 /flutter_run_log.txt
 /flutter_run_err.txt
 /yls_test.js
+
+# Reactivos propios del MMPI-2 cargados localmente (material licenciado):
+# nunca se suben al repositorio.
+/mmpi2_reactivos.csv

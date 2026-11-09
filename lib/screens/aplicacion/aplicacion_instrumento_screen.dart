@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../models/instrumento_aplicable.dart';
 import '../../models/pregunta.dart';
+import '../../services/parser_reactivos.dart';
 import '../../services/puntuacion.dart';
 import '../../widgets/futuristic_button.dart';
 import '../../widgets/theme_toggle_button.dart';
@@ -36,9 +37,11 @@ class _AplicacionInstrumentoScreenState
     extends State<AplicacionInstrumentoScreen> {
   bool _mostrandoIntro = true;
   int _indicePregunta = 0;
+  int _reactivosImportados = 0;
   late final List<int?> _respuestas;
+  late InstrumentoAplicable _instrumentoActual;
 
-  InstrumentoAplicable get _instrumento => widget.instrumento;
+  InstrumentoAplicable get _instrumento => _instrumentoActual;
 
   bool get _esUltimaPregunta =>
       _indicePregunta == _instrumento.totalPreguntas - 1;
@@ -46,10 +49,43 @@ class _AplicacionInstrumentoScreenState
   @override
   void initState() {
     super.initState();
+    _instrumentoActual = widget.instrumento;
     _respuestas = List<int?>.filled(_instrumento.totalPreguntas, null);
   }
 
   void _comenzar() => setState(() => _mostrandoIntro = false);
+
+  /// Permite al profesional cargar el texto de los ítems desde un CSV local
+  /// (sólo para instrumentos con hoja de respuestas, p. ej. el MMPI-2).
+  Future<void> _importarReactivos() async {
+    final contenido = await showDialog<String>(
+      context: context,
+      builder: (_) => const _DialogoImportarReactivos(),
+    );
+    if (!mounted || contenido == null) return;
+
+    final textos = parsearReactivosCsv(contenido);
+    if (textos.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'No se encontraron reactivos. Usa una línea por ítem: '
+            '«numero,texto».',
+          ),
+        ),
+      );
+      return;
+    }
+
+    setState(() {
+      _instrumentoActual = _instrumentoActual.conTextosDePregunta(textos);
+      _reactivosImportados = textos.length;
+    });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('${textos.length} reactivos cargados.')),
+    );
+  }
 
   void _seleccionar(int valor) {
     setState(() => _respuestas[_indicePregunta] = valor);
@@ -143,6 +179,26 @@ class _AplicacionInstrumentoScreenState
               ),
             ],
           ),
+          if (_instrumento.mostrarPlantillaRespuestas) ...[
+            const SizedBox(height: 16),
+            OutlinedButton.icon(
+              onPressed: _importarReactivos,
+              icon: const Icon(Icons.file_upload_outlined),
+              label: Text(
+                _reactivosImportados > 0
+                    ? 'Reactivos cargados ($_reactivosImportados) · Cambiar'
+                    : 'Importar reactivos (CSV)',
+              ),
+            ),
+            if (_reactivosImportados > 0) ...[
+              const SizedBox(height: 8),
+              Text(
+                'El texto de $_reactivosImportados ítems se mostrará en lugar '
+                'de «Ítem N». El archivo no se sube: queda sólo en tu equipo.',
+                style: textTheme.bodySmall,
+              ),
+            ],
+          ],
           const SizedBox(height: 24),
           FuturisticButton(
             label: 'Comenzar',
@@ -240,6 +296,71 @@ class _AplicacionInstrumentoScreenState
               ],
             ),
           ),
+        ),
+      ],
+    );
+  }
+}
+
+/// Diálogo para pegar el contenido de un CSV de reactivos
+/// (una línea por ítem: `numero,texto`).
+class _DialogoImportarReactivos extends StatefulWidget {
+  const _DialogoImportarReactivos();
+
+  @override
+  State<_DialogoImportarReactivos> createState() =>
+      _DialogoImportarReactivosState();
+}
+
+class _DialogoImportarReactivosState extends State<_DialogoImportarReactivos> {
+  final TextEditingController _controlador = TextEditingController();
+
+  @override
+  void dispose() {
+    _controlador.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Importar reactivos (CSV)'),
+      content: SizedBox(
+        width: 520,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Pega el contenido de tu archivo. Una línea por ítem, con el '
+              'número y el texto separados por coma:',
+            ),
+            const SizedBox(height: 8),
+            const Text(
+              'numero,texto\n1,Texto del primer ítem\n2,Texto del segundo',
+              style: TextStyle(fontFamily: 'monospace', fontSize: 12),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _controlador,
+              maxLines: 12,
+              minLines: 6,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: 'numero,texto\n1,…\n2,…',
+              ),
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('Cancelar'),
+        ),
+        FilledButton(
+          onPressed: () => Navigator.of(context).pop(_controlador.text),
+          child: const Text('Importar'),
         ),
       ],
     );

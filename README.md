@@ -98,6 +98,20 @@ lib/
 6. **Revisión clínica de la lista de escalas**: contrastar siglas y nombres en
    español de las 62 escalas con el manual antes de usarla en docencia.
 
+## Importar reactivos propios (MMPI-2)
+
+La hoja de respuestas del MMPI-2 no incluye los 567 reactivos (material
+propietario de Pearson / University of Minnesota Press). Si el profesional
+cuenta con licencia, puede ver el texto en su **copia local** sin publicarlo:
+
+1. Copiar `mmpi2_reactivos_plantilla.csv` como `mmpi2_reactivos.csv` (este
+   último está en `.gitignore` y no se sube al repositorio).
+2. Rellenar la columna `texto` con el contenido de cada reactivo de su
+   cuadernillo.
+3. En la app, al abrir **MMPI-2 · respuestas**, pulsar **Importar reactivos
+   (CSV)** y pegar el contenido del archivo. El texto se muestra en cada ítem
+   sólo en esa sesión y en ese navegador: no se sube ni se guarda en Supabase.
+
 ## Desarrollo
 
 ```bash

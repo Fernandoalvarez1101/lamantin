@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:lamantin/data/aplicaciones/registro_aplicaciones.dart';
 import 'package:lamantin/models/instrumento_aplicable.dart';
+import 'package:lamantin/screens/aplicacion/aplicacion_instrumento_screen.dart';
 import 'package:lamantin/screens/aplicacion/resultado_aplicacion_screen.dart';
 import 'package:lamantin/services/puntuacion.dart';
 
@@ -179,6 +180,64 @@ void main() {
 
       final todasFalso = puntuarInstrumento(hoja, List<int>.filled(567, 0));
       expect(todasFalso.total, 0);
+    });
+  });
+
+  group('MMPI-2 · importación de reactivos', () {
+    test('conTextosDePregunta sustituye solo los ítems indicados', () {
+      final conTextos = hoja.conTextosDePregunta(<int, String>{
+        1: 'Me gusta leer',
+        567: 'Duermo bien',
+      });
+
+      expect(conTextos.totalPreguntas, 567);
+      expect(conTextos.preguntas.first.texto, '1. Me gusta leer');
+      expect(conTextos.preguntas[1].texto, 'Ítem 2');
+      expect(conTextos.preguntas.last.texto, '567. Duermo bien');
+
+      // La hoja original queda intacta.
+      expect(hoja.preguntas.first.texto, 'Ítem 1');
+    });
+
+    testWidgets('pegar un CSV reemplaza el texto de los ítems en la pantalla',
+        (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: AplicacionInstrumentoScreen(instrumento: hoja),
+        ),
+      );
+
+      expect(find.text('Importar reactivos (CSV)'), findsOneWidget);
+
+      await tester.tap(find.text('Importar reactivos (CSV)'));
+      await tester.pumpAndSettle();
+
+      await tester.enterText(
+        find.byType(TextField),
+        'numero,texto\n1,Me gusta leer\n2,Camino todos los días',
+      );
+      await tester.tap(find.text('Importar'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Reactivos cargados (2) · Cambiar'), findsOneWidget);
+
+      // Espera a que desaparezca la SnackBar «2 reactivos cargados» para que
+      // no tape el botón «Siguiente» de la pantalla de preguntas.
+      await tester.pump(const Duration(seconds: 5));
+      await tester.pumpAndSettle();
+
+      await tester.ensureVisible(find.text('Comenzar'));
+      await tester.tap(find.text('Comenzar'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('1. Me gusta leer'), findsOneWidget);
+
+      await tester.tap(find.text('V · Verdadero'));
+      await tester.pump();
+      await tester.tap(find.text('Siguiente'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('2. Camino todos los días'), findsOneWidget);
     });
   });
 

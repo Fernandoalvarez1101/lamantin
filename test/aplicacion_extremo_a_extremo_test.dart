@@ -157,6 +157,7 @@ void main() {
 
       expect(find.text(mmpi2RespuestasAplicable.titulo), findsOneWidget);
 
+      await tester.ensureVisible(find.text('Comenzar'));
       await tester.tap(find.text('Comenzar'));
       await tester.pumpAndSettle();
 
