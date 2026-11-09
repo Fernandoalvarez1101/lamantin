@@ -92,4 +92,22 @@ void main() {
       );
     }
   });
+
+  test(
+      'La categoría de personalidad incluye el MMPI-2 como hoja de '
+      'puntuación', () {
+    final mmpi = catalogoInstrumentos.firstWhere((i) => i.id == 'mmpi-2');
+
+    expect(mmpi.sigla, 'MMPI-2');
+    expect(mmpi.categoria, CategoriaInstrumento.personalidad);
+    expect(mmpi.numeroItems, 567);
+    expect(mmpi.disponibilidad, contains('licencia'));
+
+    // Instrumento propietario: la app sólo ofrece la hoja de puntuación con
+    // el corte T ≥ 65, sin reproducir los ítems ni mostrar un total.
+    final aplicacion = aplicacionDe('mmpi-2');
+    expect(aplicacion, isNotNull);
+    expect(aplicacion!.mostrarPuntuacionTotal, isFalse);
+    expect(aplicacion.subescalas, isNotEmpty);
+  });
 }

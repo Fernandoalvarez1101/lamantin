@@ -27,6 +27,7 @@ import 'k10.dart';
 import 'lotr.dart';
 import 'maas.dart';
 import 'mfq.dart';
+import 'mmpi2.dart';
 import 'moca.dart';
 import 'mspss.dart';
 import 'onet_ip.dart';
@@ -113,6 +114,7 @@ const Map<String, InstrumentoAplicable> aplicacionesDisponibles = {
   // Personalidad
   'bfi-44': bfi44Aplicable,
   'ipip-neo-120': ipipNeo120Aplicable,
+  'mmpi-2': mmpi2Aplicable,
   // Atención y concentración
   'asrs-v1-1': asrsAplicable,
   // Neurocognitivo

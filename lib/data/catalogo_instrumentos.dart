@@ -445,6 +445,26 @@ const List<Instrumento> catalogoInstrumentos = [
     poblacion: 'Adultos',
     nota: 'Más de 3.000 ítems y 250 escalas disponibles en ipip.ori.org.',
   ),
+  Instrumento(
+    id: 'mmpi-2',
+    nombre: 'Inventario Multifásico de Personalidad de Minnesota-2',
+    sigla: 'MMPI-2',
+    categoria: CategoriaInstrumento.personalidad,
+    descripcion: 'Perfil de personalidad y psicopatología con 4 escalas de '
+        'validez y 10 escalas clínicas básicas (Hs, D, Hy, Pd, Mf, Pa, Pt, '
+        'Sc, Ma, Si), baremadas por sexo y edad.',
+    autor: 'Hathaway, McKinley y colaboradores (University of Minnesota Press)',
+    anio: 1989,
+    numeroItems: 567,
+    tiempo: '60-90 min',
+    disponibilidad: 'Requiere licencia (Pearson)',
+    poblacion: 'Adultos (18 años o más; lectura de nivel de secundaria)',
+    nota: 'Instrumento propietario: sólo puede aplicarlo personal con la '
+        'licencia vigente del editor y Lamantin no reproduce sus 567 ítems. '
+        'La app ofrece una hoja de puntuación en la que el profesional '
+        'registra, escala por escala, si T ≥ 65. Existen MMPI-2-RF (338 '
+        'ítems) y MMPI-A (adolescentes) con baremos propios.',
+  ),
 
   // ─────────────────────── BIENESTAR Y CALIDAD DE VIDA ───────────────────────
   Instrumento(

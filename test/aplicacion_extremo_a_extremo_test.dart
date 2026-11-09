@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lamantin/data/aplicaciones/bai.dart';
 import 'package:lamantin/data/aplicaciones/gbjws.dart';
 import 'package:lamantin/data/aplicaciones/ius12.dart';
+import 'package:lamantin/data/aplicaciones/mmpi2.dart';
 import 'package:lamantin/data/aplicaciones/registro_aplicaciones.dart';
 import 'package:lamantin/data/aplicaciones/rotter_locus.dart';
 import 'package:lamantin/data/aplicaciones/rses.dart';
@@ -96,6 +97,49 @@ void main() {
       await _aplicarDePrincipioAFin(tester, rsesAplicable, 25);
       expect(find.text('Rango: 10–40'), findsOneWidget);
     });
+
+    testWidgets('MMPI-2 llega al resultado con sus 14 escalas elevadas',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: AplicacionInstrumentoScreen(instrumento: mmpi2Aplicable),
+        ),
+      );
+
+      expect(find.text(mmpi2Aplicable.titulo), findsOneWidget);
+
+      await tester.tap(find.text('Comenzar'));
+      await tester.pumpAndSettle();
+
+      for (var i = 0; i < mmpi2Aplicable.totalPreguntas; i++) {
+        // Hoja de puntuación: el profesional marca «Sí (T ≥ 65)» en cada
+        // escala trasladando el resultado del informe oficial.
+        final opcion = find.text('Sí (T ≥ 65)');
+        await tester.ensureVisible(opcion);
+        await tester.pumpAndSettle();
+        await tester.tap(opcion);
+        await tester.pump();
+
+        final esUltima = i == mmpi2Aplicable.totalPreguntas - 1;
+        await tester.tap(find.text(esUltima ? 'Ver resultados' : 'Siguiente'));
+        await tester.pumpAndSettle();
+      }
+
+      expect(find.text('Resultado'), findsOneWidget);
+
+      // El perfil se lee escala por escala: no hay tarjeta de total.
+      expect(find.text('Puntuación total'), findsNothing);
+      expect(find.text('Puntuaciones'), findsOneWidget);
+
+      for (final subescala in mmpi2Aplicable.subescalas) {
+        expect(
+          find.text(subescala.nombre),
+          findsOneWidget,
+          reason: '${subescala.nombre} no aparece en el resultado',
+        );
+      }
+      expect(find.text('Elevación clínica'), findsNWidgets(14));
+    });
   });
 
   testWidgets(
@@ -104,6 +148,7 @@ void main() {
     const esperados = <String, List<String>>{
       'Ansiedad': ['BAI', 'IUS-12'],
       'Creencias y esquemas cognitivos': ['Rotter I-E', 'GBJWS'],
+      'Personalidad': ['MMPI-2'],
     };
 
     await tester.pumpWidget(

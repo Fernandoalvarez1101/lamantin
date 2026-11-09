@@ -10,14 +10,14 @@ Fase inicial. Actualmente incluye:
 
 - Temas claro y oscuro con la paleta de marca (púrpura/violeta).
 - **Dashboard principal** con navegación hacia los módulos de la aplicación.
-- **Módulo Instrumentos**: catálogo de **51 instrumentos de uso público**
+- **Módulo Instrumentos**: catálogo de **52 instrumentos de uso público**
   clasificados en 18 categorías (Depresión, Ansiedad, Estrés, Trauma y TEPT,
   Vocacional, Autoestima, Creencias y esquemas cognitivos, Sueño, Adicciones,
   Personalidad, Bienestar, Atención, Salud mental general, Riesgo suicida,
   Infanto-juvenil, Apoyo social y soledad, Regulación emocional y
   Neurocognitivo), con ficha completa de cada instrumento.
 - **Aplicación de instrumentos**: flujo completo de aplicación para
-  **49 instrumentos** de las categorías **Depresión** (PHQ-9, CES-D, GDS-15,
+  **52 instrumentos** de las categorías **Depresión** (PHQ-9, CES-D, GDS-15,
   EPDS, Zung SDS, CUDOS), **Ansiedad** (GAD-7, Zung SAS, SPIN, PSWQ, BAI,
   IUS-12), **Estrés** (PSS-10), **Trauma y TEPT** (PCL-5, IES-R, DAR-5),
   **Adicciones** (AUDIT, CAGE, DAST-10, CRAFFT, TAPS, ASSIST), **Sueño**
@@ -25,9 +25,9 @@ Fase inicial. Actualmente incluye:
   LOT-R, FS), **Regulación emocional** (ERQ, MAAS), **Infanto-juvenil**
   (SDQ, SCARED, CES-DC, MFQ, SNAP-IV), **Riesgo suicida** (C-SSRS, SBQ-R),
   **Vocacional** (O*NET IP), **Autoestima** (RSES), **Creencias y esquemas
-  cognitivos** (Rotter I-E, GBJWS), **Personalidad** (BFI-44), **Atención**
-  (ASRS), **Salud mental general** (K10, SRQ-20, DASS-21) y **Apoyo social**
-  (UCLA-20, MSPSS). El flujo incluye:
+  cognitivos** (Rotter I-E, GBJWS), **Personalidad** (BFI-44, IPIP-NEO-120,
+  MMPI-2), **Atención** (ASRS), **Salud mental general** (K10, SRQ-20,
+  DASS-21) y **Apoyo social** (UCLA-20, MSPSS). El flujo incluye:
   instrucciones, preguntas una a una con barra de progreso, puntuación
   (ítems invertidos, pesos por opción, componentes, subescalas y totales
   personalizados), bandas de severidad, alertas clínicas y nota de
@@ -38,10 +38,11 @@ Fase inicial. Actualmente incluye:
   del SCARED) se muestran en **modo descriptivo**: puntuación bruta, rango de
   escala y media por ítem, **sin etiqueta categórica**.
 
-  *El **MoCA** está disponible como **hoja de puntuación** administrada por
-  el profesional (no reproduce el material oficial), y el **IPIP-NEO-120**
-  incluye los 120 ítems originales del IPIP en inglés (dominio público), con
-  30 facetas y 5 dominios en modo descriptivo.*
+  *El **MoCA** y el **MMPI-2** están disponibles como **hoja de puntuación**
+  administrada por el profesional (no reproducen el material oficial): en el
+  MMPI-2 se registra, escala por escala, si la puntuación T alcanza el corte
+  de 65. El **IPIP-NEO-120** incluye los 120 ítems originales del IPIP en
+  inglés (dominio público), con 30 facetas y 5 dominios en modo descriptivo.*
 
 ## Arquitectura (roadmap)
 
